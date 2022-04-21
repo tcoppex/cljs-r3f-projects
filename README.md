@@ -43,7 +43,6 @@ npm run start
 
 `react-three/drei` requires the added package `regenerator-runtime` to be compiled as well as specific versions of other libraries for it to work.
 Without `drei`, precise versionning might be less of an issue.
-```
 
 <!-- ----------------------------------------------------------------------- -->
 
