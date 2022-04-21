@@ -1,0 +1,26 @@
+html,
+body {
+  width: 100%;
+  height: 100%;
+  margin: 0;
+  padding: 0;
+}
+
+body {
+  font-family: 'Helvetica Neue', Verdana, Helvetica, Arial, sans-serif;
+  -webkit-font-smoothing: antialiased;
+  font-size: 1.125em;
+  line-height: 1.5em;
+
+  background-color: #252525;
+  color: #c5c5c5;
+}
+
+a {
+  text-decoration: none;
+  color: #19f;
+}
+
+a:hover {
+  text-decoration: underline;
+}
