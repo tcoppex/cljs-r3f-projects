@@ -1,48 +1,97 @@
 (ns app.core
   (:require
-    ["react" :refer [useRef Suspense]]
-    ["three" :as THREE]
     ["@react-three/fiber" :refer [Canvas useFrame]]
-    ["@react-three/drei" :refer [PerspectiveCamera]]
-    [re-frame.core :as re-frame]
+    [react :refer [useRef useState]]
+    [applied-science.js-interop :as j]
     [reagent.core :as r]
     [reagent.dom :as rdom]))
 
-;; -------------------------
-;; Shortcuts
 
+;; -------------------------
+;; Defines.
+
+;; We need to adapt react-three/* classes to reagent, whereas ThreeJS classes 
+;; can be used directly as keyword or name.
 (defonce canvas (r/adapt-react-class Canvas))
-; (defonce sky (r/adapt-react-class Sky))
-; (defonce environment (r/adapt-react-class Environment))
-; (defonce perspective-camera (r/adapt-react-class PerspectiveCamera))
-; (defonce suspense (r/adapt-react-class Suspense))
+
+;; Main camera setting.
+(def camera-config {:position [0 1 3] :near 0.1 :far 100.0 :fov 60})
+
 
 ;; -------------------------
-;; Views
+;; Helpers.
 
-(defn home-page []
-  [:div [:h2 "Welcome to Reagent !"]])
+(defn- set-rotation! [o x y z]
+  "Set the euler angles of a js object."
+  (j/call-in o [.-rotation .-set] x y z))
 
-; (defn main-scene []
-;   (r/create-class
-;     {:reagent-render (fn []
-;                        [canvas
-;                         {:dpr [1 1.5]
-;                          :shadows true
-;                          :camera {:position [0 5 15] 
-;                                   :near 1
-;                                   :far 200
-;                                   :fov 50}}
-;                         [sky {:sun-position [100 10 100]
-;                               :scale 1000}]
-;                         [:ambientLight [:intensity 0.1]]])}))
+(defn- rotate-mesh [meshref dv]
+  "Rotate a mesh to a given vector of euler angles."
+  (let [o (j/get meshref :current)
+        e (j/get o .-rotation)
+        v [(j/get e .-x) (j/get e .-y) (j/get e .-z)]
+        [x y z] (map #(+ %1 %2) v dv)]
+    (set-rotation! o x y z)))
+
 
 ;; -------------------------
-;; Initialize app
+;; Views.
+;;
+;; To use hooks (useFrame, useRef, useState) we need to wrap objects in 
+;; fragment tag (eg [:f> <Box>]).
+;;
+;; There might be better Reagent alternatives than using React directly 
+;; (eg. using atom).
+;;
+;; @see https://github.com/reagent-project/reagent/blob/master/doc/ReactFeatures.md#hooks=
+;;
+
+(defn- <Box> [props]
+  "Reactive box component."
+  ([] <Box> {})
+  (let [defaults {:color "white" :size [1 1 1] :position [0 0 0]}
+        {color :color size :size position :position} (merge defaults props)
+        ; Reference to the THREE.Mesh object.
+        mesh-ref (useRef)
+        ; Hold state for hovered and clicked events.
+        [hovered hover] (useState false)
+        [clicked click] (useState false)
+        ;; Events results.
+        scale (if clicked 1.5 1.0)
+        color (if hovered "hotpink" color)
+        sign (js/Math.sign (get position 0))
+        angles [0.01 (* sign -0.01) 0.0]]
+    (useFrame #(rotate-mesh mesh-ref angles))
+    [:mesh {:ref              mesh-ref
+            :on-click         #(click (not clicked))
+            :on-pointer-over  #(hover true)
+            :on-pointer-out   #(hover false)
+            :position         position
+            :scale            scale}
+     [:boxBufferGeometry {:args size}]
+     [:meshStandardMaterial {:color color}]]))
+
+(defn- <Canvas> []
+  "Two boxes with a light setup."
+  [canvas {:shadows true
+           :camera camera-config}
+   [:ambientLight {:intensity 0.5}]
+   [:spotLight {:position [10 10 10] :angle 0.5 :penumbra 1}]
+   [:pointLight {:position [-10 -10 -10]}]
+   [:f> <Box> {:color "orange" :position [-1.2 0 0]}]
+   [:f> <Box> {:color "red"    :position [+1.2 0 0]}]
+  ])
+
+(defn- app []
+  (r/create-class {:reagent-render <Canvas>}))
+
+
+;; -------------------------
+;; Initialize the app.
 
 (defn mount-root []
   (let [root-el (.getElementById js/document "root")]
-    (rdom/render [home-page] root-el)))
+    (rdom/render [app] root-el)))
 
 (defn ^:export init! []
   (mount-root))
