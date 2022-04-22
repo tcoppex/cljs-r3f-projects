@@ -4,7 +4,8 @@
 
  :dependencies [[reagent "1.1.1"]
                 [re-frame "1.3.0-rc3"]
-                [binaryage/devtools "1.0.6"]]
+                [binaryage/devtools "1.0.6"]
+                [applied-science/js-interop "0.3.3"]]
 
  :builds       {:app {:target :browser
          
