@@ -6,7 +6,6 @@
     [reagent.core :as r]
     [reagent.dom :as rdom]))
 
-
 ;; -------------------------
 ;; Defines.
 
@@ -16,7 +15,6 @@
 
 ;; Main camera setting.
 (def camera-config {:position [0 1 3] :near 0.1 :far 100.0 :fov 60})
-
 
 ;; -------------------------
 ;; Helpers.
@@ -33,15 +31,12 @@
         [x y z] (map #(+ %1 %2) v dv)]
     (set-rotation! o x y z)))
 
-
 ;; -------------------------
 ;; Views.
+
 ;;
-;; To use hooks (useFrame, useRef, useState) we need to wrap objects in 
-;; fragment tag (eg [:f> <Box>]).
-;;
-;; There might be better Reagent alternatives than using React directly 
-;; (eg. using atom).
+;; To use hooks (useFrame, useRef, useState) we need to wrap objects in a fragment 
+;; tag (eg [:f> <Box>]).
 ;;
 ;; @see https://github.com/reagent-project/reagent/blob/master/doc/ReactFeatures.md#hooks=
 ;;
@@ -84,7 +79,6 @@
 
 (defn- app []
   (r/create-class {:reagent-render <Canvas>}))
-
 
 ;; -------------------------
 ;; Initialize the app.
