@@ -29,6 +29,7 @@ Shadow-cljs :
 - [reagent](https://github.com/reagent-project/reagent)
 - [re-frame](https://github.com/Day8/re-frame)
 - [devtools](https://github.com/binaryage/cljs-devtools)
+- [js-interop](https://github.com/applied-science/js-interop)
 
 ### Running the app
 
@@ -54,14 +55,21 @@ Without `drei`, precise versionning might be less of an issue.
 
 ## References
 
+* [ClojureScript + ReactNative](https://cljsrn.org/)
 * [THREE.js](https://threejs.org/)
 * [Reagent](https://github.com/reagent-project/reagent)
+* [Reagent React Features](https://github.com/reagent-project/reagent/blob/master/doc/ReactFeatures.md)
 * [ReactJS cheatsheet](https://devhints.io/react)
 * [ClojureJS cheatsheet](https://cljs.info/cheatsheet/)
 * [react-three/drei](https://github.com/pmndrs/drei)
 * [react-three/postprocessing](https://www.npmjs.com/package/@react-three/postprocessing)
+* [cljs-react-three-fiber](https://github.com/binaryage/cljs-react-three-fiber)
+* [R3F examples](https://docs.pmnd.rs/react-three-fiber/getting-started/examples#basic-examples=)
 * [R3F in practice](https://github.com/Domenicobrz/R3F-in-practice)
 * [racing-game-cljs](https://github.com/ertugrulcetin/racing-game-cljs)
 * [herfi](https://github.com/ertugrulcetin/herfi) (without Fiber).
+
+See also :
+https://github.com/lilactown/helix
 
 <!-- ----------------------------------------------------------------------- -->
