@@ -21,7 +21,7 @@ cd my-project
 npm start
 ```
 
-Finally, you can clear its cache and built files by calling the clean command :
+Finally, you can clear its cache and built files by calling the `clean` command :
 ```bash
 npm run clean
 ```
