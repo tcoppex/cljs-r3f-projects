@@ -28,8 +28,8 @@
 
 ;; Same for react-spring animated components.
 (defn- adapt-animated-class [key] (r/adapt-react-class (j/get a key)))
-(defonce animated-mesh (adapt-animated-class :mesh))
-(defonce animated-meshStandardMaterial (adapt-animated-class :meshStandardMaterial))
+(defonce a-mesh (adapt-animated-class :mesh))
+(defonce a-meshStandardMaterial (adapt-animated-class :meshStandardMaterial))
 
 ;; ----------------------------------------------------------------------------
 ;; Maths Utils.
@@ -68,7 +68,7 @@
 ;; ----------------------------------------------------------------------------
 ;; Views.
 
-(defn- <Model> [props]
+(defn- Model [props]
   ""
   (let [;; States.
         [hovered hover] (useState false)
@@ -133,13 +133,13 @@
                      :scale [100 100 100]}
         [:meshStandardMaterial {:map texture :skinning true}]]]
      ;; Selection halo.
-     [animated-mesh {:receiveShadow true
+     [a-mesh {:receiveShadow true
                      :position [0 1 -1]
                      :scale spring-scale}
       [:circleBufferGeometry {:args [0.6 64]}]
-      [animated-meshStandardMaterial {:color spring-color}]]]))
+      [a-meshStandardMaterial {:color spring-color}]]]))
 
-(defn- <FloorMesh> [props]
+(defn- FloorMesh [props]
   "Transparent plane receiving shadows."
   [:mesh props
    [:planeBufferGeometry {:args [10 10 1 1]}]
@@ -158,13 +158,13 @@
    ; Animated models.
    [:group {:position [0 -1 0]}
     [suspense {:fallback nil}
-      [:f> <Model> {:pose 4 :position [0 0 0]}]
-      [:f> <Model> {:pose 1 :position [1 0 -1]}]
-      [:f> <Model> {:pose 2 :position [-1 0 -1]}]]]
+      [:f> Model {:pose 4 :position [0 0 0]}]
+      [:f> Model {:pose 1 :position [1 0 -1]}]
+      [:f> Model {:pose 2 :position [-1 0 -1]}]]]
    ; Plane receiving shadows.
-   [<FloorMesh> {:rotation [(- half-pi) 0 0]
-                 :position [0 -1 0]
-                 :receiveShadow true}]
+   [FloorMesh {:rotation [(- half-pi) 0 0]
+               :position [0 -1 0]
+               :receiveShadow true}]
    ; Update camera from mouse position.
    [:f> CameraMouseUpdate]])
 
