@@ -10,18 +10,21 @@ A collection of samples using a *__ClojureScript / React-Three-Fiber__* stack.
 **_Preamble_**<br/>
 A ClojureScript (or _Reagent_) project can be created using  `npx create-cljs-project my-project` (respectively `lein new reagent-frontend my-project`) but the versionning of the stack (*especially for react-three/drei*) can become messed up. -->
 
-To create a new project simply copy the `template` project :
+To create a new project, copy the `template` project :
 ```bash
 cp -R template/ my-project
 ```
 
-To start a project enter its directory and run the `start` command :
+Then start it a project by entering its directory and running the `start` command :
 ```bash
 cd my-project
 npm start
 ```
 
-Finally, you can call `npm run clean` to clear the project cache and its built files.
+Finally, you can clear its cache and built files by calling the clean command :
+```bash
+npm run clean
+```
 
 <!-- ----------------------------------------------------------------------- -->
 
@@ -47,8 +50,8 @@ and the following `Shadow-cljs` packages :
 
 1. After compilation the browser may sometimes fails to render the app. If it happens try either to refresh your browser or to trigger
 the live compilation until it renders again.
-2. The package `regenerator-runtime` is required for `react-spring` and `react-three/drei` to work,
-as well as specific versions of `react`, `shadow-cljs` & `threejs`.
+2. The package `regenerator-runtime` is required for `react-spring` and `react-three/drei` to work.
+3. Upgrading packages versions can be tricky for build integrity, especially with `drei` `react`, `shadow-cljs` & `threejs`.
 
 <!-- ----------------------------------------------------------------------- -->
 <!-- 
