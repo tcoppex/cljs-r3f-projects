@@ -17,11 +17,12 @@
                       :compiler-options {:infer-externs :auto
                                          :output-feature-set :es6}
                       
-                      :modules {:app {:entries [app.core]}}
-                      :devtools {:after-load app.core/mount-root}
+                      :modules {:app {:entries [app.core]
+                                      :init-fn app.core/init!}}
+                      
+                      ;:devtools {:after-load app.core/mount-root}
                      }
                }
               
  
- :dev-http {8080 {:root "public"}}
- }
+ :dev-http {8080 {:root "public"}}}

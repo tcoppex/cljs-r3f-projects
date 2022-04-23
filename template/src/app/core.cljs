@@ -6,17 +6,20 @@
     [reagent.core :as r]
     [reagent.dom :as rdom]))
 
-;; -------------------------
-;; Defines.
+;; ----------------------------------------------------------------------------
+;; ReactJS redefine.
 
 ;; We need to adapt react-three/* classes to reagent, whereas ThreeJS classes 
 ;; can be used directly as keyword or name.
 (defonce canvas (r/adapt-react-class Canvas))
 
+;; ----------------------------------------------------------------------------
+;; App configurations.
+
 ;; Main camera setting.
 (def camera-config {:position [0 1 3] :near 0.1 :far 100.0 :fov 60})
 
-;; -------------------------
+;; ----------------------------------------------------------------------------
 ;; Helpers.
 
 (defn- set-rotation! [o x y z]
@@ -31,7 +34,7 @@
         [x y z] (map #(+ %1 %2) v dv)]
     (set-rotation! o x y z)))
 
-;; -------------------------
+;; ----------------------------------------------------------------------------
 ;; Views.
 
 ;;
@@ -74,16 +77,15 @@
    [:spotLight {:position [10 10 10] :angle 0.5 :penumbra 1}]
    [:pointLight {:position [-10 -10 -10]}]
    [:f> <Box> {:color "orange" :position [-1.2 0 0]}]
-   [:f> <Box> {:color "red"    :position [+1.2 0 0]}]
-  ])
+   [:f> <Box> {:color "red"    :position [+1.2 0 0]}]])
 
 (defn- app []
   (r/create-class {:reagent-render <Canvas>}))
 
-;; -------------------------
+;; ----------------------------------------------------------------------------
 ;; Initialize the app.
 
-(defn mount-root []
+(defn ^:dev/after-load mount-root []
   (let [root-el (.getElementById js/document "root")]
     (rdom/render [app] root-el)))
 
