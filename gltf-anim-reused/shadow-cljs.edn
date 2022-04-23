@@ -1,0 +1,28 @@
+{:nrepl {:port 8777}
+
+ :source-paths ["src"]
+
+ :dependencies [[reagent "1.1.1"]
+                [re-frame "1.3.0-rc3"]
+                [applied-science/js-interop "0.3.3"]]
+
+ :builds       {:app {:target :browser
+         
+                      :output-dir "public/js"
+                      :asset-path "/js"
+                      
+                      ;; We need this line to prevent a compilation issue with drei.
+                      :js-options {:entry-keys ["module" "browser" "main"]}
+                      
+                      :compiler-options {:infer-externs :auto
+                                         :output-feature-set :es6}
+                      
+                      :modules {:app {:entries [app.core]
+                                      :init-fn app.core/init!}}
+                      
+                      ;:devtools {:after-load app.core/mount-root}
+                     }
+               }
+              
+ 
+ :dev-http {8080 {:root "public"}}}
