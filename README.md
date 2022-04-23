@@ -1,6 +1,6 @@
 # :last_quarter_moon_with_face: cljs-r3f-projects :first_quarter_moon_with_face:
 
-A collection of projects using a *__ClojureScript / React-Three-Fiber__* stack.
+A collection of samples using a *__ClojureScript / React-Three-Fiber__* stack.
 
 <!-- ----------------------------------------------------------------------- -->
 
@@ -45,10 +45,10 @@ and the following `Shadow-cljs` packages :
  
 ## Known issues
 
-1. The package `regenerator-runtime` is required for `react-spring` and `react-three/drei` to work,
-as well as specific versions of `react`, `shadow-cljs` & `threejs`.
-2. After compilation the browser may sometimes fails to render the app. If it happens a workaround is to trigger
+1. After compilation the browser may sometimes fails to render the app. If it happens try either to refresh your browser or to trigger
 the live compilation until it renders again.
+2. The package `regenerator-runtime` is required for `react-spring` and `react-three/drei` to work,
+as well as specific versions of `react`, `shadow-cljs` & `threejs`.
 
 <!-- ----------------------------------------------------------------------- -->
 <!-- 
@@ -58,20 +58,21 @@ the live compilation until it renders again.
 
 <!-- ----------------------------------------------------------------------- -->
 
-## References
+## References & Documentations
 
-* [THREE.js](https://threejs.org/)
+* [ClojureJS cheatsheet](https://cljs.info/cheatsheet/)
+* [ReactJS cheatsheet](https://devhints.io/react)
+* [ShadowCLJS Users Guide](https://shadow-cljs.github.io/docs/UsersGuide.html)
 * [Reagent](https://github.com/reagent-project/reagent)
 * [Reagent React Features](https://github.com/reagent-project/reagent/blob/master/doc/ReactFeatures.md)
-* [ReactJS cheatsheet](https://devhints.io/react)
-* [ClojureJS cheatsheet](https://cljs.info/cheatsheet/)
+* [React Spring](https://react-spring.io/guides/r3f)
+* [THREE.js](https://threejs.org/)
 * [react-three/drei](https://github.com/pmndrs/drei) (and [v6.1.1](https://github.com/pmndrs/drei/tree/v6.1.1))
 * [react-three/postprocessing](https://www.npmjs.com/package/@react-three/postprocessing)
 * [react-three-fiber examples](https://docs.pmnd.rs/react-three-fiber/getting-started/examples#basic-examples=)
 * [cljs-react-three-fiber](https://github.com/binaryage/cljs-react-three-fiber)
 * [racing-game-cljs](https://github.com/ertugrulcetin/racing-game-cljs)
 * [R3F in practice](https://github.com/Domenicobrz/R3F-in-practice)
-* [React Spring](https://react-spring.io/guides/r3f)
 
 <!-- ----------------------------------------------------------------------- -->
 
