@@ -26,7 +26,7 @@
   "Set the euler angles of a js object."
   (j/call-in o [.-rotation .-set] x y z))
 
-(defn- rotate-mesh [meshref dv]
+(defn- rotate-mesh! [meshref dv]
   "Rotate a mesh to a given vector of euler angles."
   (let [o (j/get meshref :current)
         e (j/get o .-rotation)
@@ -44,9 +44,9 @@
 ;; @see https://github.com/reagent-project/reagent/blob/master/doc/ReactFeatures.md#hooks=
 ;;
 
-(defn- <Box> [props]
+(defn- Box [props]
   "Reactive box component."
-  ([] <Box> {})
+  ([] Box {})
   (let [defaults {:color "white" :size [1 1 1] :position [0 0 0]}
         {color :color size :size position :position} (merge defaults props)
         ; Reference to the THREE.Mesh object.
@@ -59,7 +59,7 @@
         color (if hovered "hotpink" color)
         sign (js/Math.sign (get position 0))
         angles [0.01 (* sign -0.01) 0.0]]
-    (useFrame #(rotate-mesh mesh-ref angles))
+    (useFrame #(rotate-mesh! mesh-ref angles))
     [:mesh {:ref              mesh-ref
             :on-click         #(click (not clicked))
             :on-pointer-over  #(hover true)
@@ -70,14 +70,14 @@
      [:meshStandardMaterial {:color color}]]))
 
 (defn- <Canvas> []
-  "Two boxes with a light setup."
+  "Two rotating and interactive boxes with a light setup."
   [canvas {:shadows true
            :camera camera-config}
    [:ambientLight {:intensity 0.5}]
    [:spotLight {:position [10 10 10] :angle 0.5 :penumbra 1}]
    [:pointLight {:position [-10 -10 -10]}]
-   [:f> <Box> {:color "orange" :position [-1.2 0 0]}]
-   [:f> <Box> {:color "red"    :position [+1.2 0 0]}]])
+   [:f> Box {:color "orange" :position [-1.2 0 0]}]
+   [:f> Box {:color "red"    :position [+1.2 0 0]}]])
 
 (defn- app []
   (r/create-class {:reagent-render <Canvas>}))
