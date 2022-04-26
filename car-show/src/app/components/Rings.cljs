@@ -49,7 +49,7 @@
                    (move-ring mesh i ticks)
                    )))
     [:mesh {:castShadow true
-            :receivShadow true
+            :receiveShadow true
             :position [0 0 0]
             :key i
             :ref mesh-ref}
