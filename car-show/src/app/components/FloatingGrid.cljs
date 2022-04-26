@@ -37,7 +37,7 @@
             :receiveShadow true}
       [:planeGeometry {:args [35 35]}]
       [:meshBasicMaterial {:color [1.0 1.0 1.0]
-                           :opacity 0.25
+                           :opacity 0.05
                            :map diffuse
                            :alphaMap diffuse
                            :transparent true}]]))
