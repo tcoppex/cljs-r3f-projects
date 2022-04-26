@@ -8,28 +8,45 @@
   (:require
     ["regenerator-runtime"] ; required for react-spring & drei.
     
+    ["react" :refer [useRef useEffect useMemo useState Suspense]]
+    ["@react-spring/three" :refer [a useSpring]]
     ["@react-three/fiber" :refer [Canvas useFrame useGraph]]
     ["@react-three/drei" :refer [useGLTF useTexture useAnimations]]
-    ["@react-spring/three" :refer [a useSpring]]
     ["three-stdlib" :refer [SkeletonUtils]]
     ["three" :as THREE]
-    ["react" :refer [useRef useEffect useMemo useState Suspense]]
     
     [applied-science.js-interop :as j]
     [reagent.core :as r]
     [reagent.dom :as rdom]))
 
 ;; ----------------------------------------------------------------------------
-;; ReactJS redefine.
+;; ReactJS Redefines.
 
-;; We need to adapt react js classes to reagent.
 (defonce canvas (r/adapt-react-class Canvas))
 (defonce suspense (r/adapt-react-class Suspense))
 
-;; Same for react-spring animated components.
-(defn- adapt-animated-class [key] (r/adapt-react-class (j/get a key)))
+(defn- adapt-animated-class [key] 
+  (r/adapt-react-class (j/get a key)))
+
 (defonce a-mesh (adapt-animated-class :mesh))
 (defonce a-meshStandardMaterial (adapt-animated-class :meshStandardMaterial))
+
+;; ----------------------------------------------------------------------------
+
+(defn skeleton-utils-clone [o]
+  (.clone SkeletonUtils o))
+
+; (defn use-memo [func o]
+;   (useMemo #(func o) #js [o]))
+
+; (defmacro js-calls [func o & [k & args]]
+;   )
+; (js-calls action [:reset] [:fadeIn 0.5] [:play])
+; (j/call (j/call (j/call action :reset) :fadeIn 0.5) :play)
+
+(defn js-gets [o & keys] 
+  "Retrieve multiples keys from a js object."
+  (map #(j/get o %) keys))
 
 ;; ----------------------------------------------------------------------------
 ;; Maths Utils.
@@ -76,37 +93,34 @@
         
         ;; Load model.
         _ (useGLTF (:model stacy-assets)) 
-        scene (j/get _ :scene) 
-        animations (j/get _ :animations)
+        [scene animations] (js-gets _ :scene :animations)
         
         ;; Fetch texture separately & disable its vertical flip.
         texture (useTexture (:texture stacy-assets))
         _ (j/assoc! texture .flipY false)
                                 
         ;; Skinned meshes cannot be re-used in threejs without cloning them.
-        clone (useMemo #(.clone SkeletonUtils scene) #js [scene])
+        clone (useMemo #(skeleton-utils-clone scene) #js [scene])
         
         ;; Creates two flat object collections for nodes and materials.
         nodes (j/get (useGraph clone) :nodes)
-        geometry (j/get-in nodes [.stacy .geometry])
-        skeleton (j/get-in nodes [.stacy .skeleton])
+        geometry (j/get-in nodes [:stacy :geometry])
+        skeleton (j/get-in nodes [:stacy :skeleton])
         
         ;; Extract animations actions.
         _ (useAnimations animations)
-        ref (j/get _ :ref)
-        names (j/get _ :names)
-        actions (j/get _ :actions)
+        [ref names actions] (js-gets _ :ref :names :actions)
         
         ;; Callback to change current animation.
-        anim-count (j/get names .length)
-        change-anim! #(set-animation-index (rem (inc animation-index) anim-count))
+        anim-count (j/get names :length)
+        next-anim-index (rem (inc animation-index) anim-count)
+        change-anim! #(set-animation-index next-anim-index)
         
         ;; Spring to animate the selection halo.
         _ (useSpring (if hovered #js {:scale 1.2 :color "tomato"} 
                                  #js {:scale 0.8 :color "bisque"}))
-        spring-color (j/get _ :color)
-        spring-scale (j/get _ :scale)]
-
+        [color scale] (js-gets _ :color :scale)]
+    
     ;; Blend animations when changing.
     (useEffect 
       (fn [] (when-let [action (j/get actions (j/get names animation-index))]
@@ -135,9 +149,9 @@
      ;; Selection halo.
      [a-mesh {:receiveShadow true
                      :position [0 1 -1]
-                     :scale spring-scale}
+                     :scale scale}
       [:circleBufferGeometry {:args [0.6 64]}]
-      [a-meshStandardMaterial {:color spring-color}]]]))
+      [a-meshStandardMaterial {:color color}]]]))
 
 (defn- FloorMesh [props]
   "Transparent plane receiving shadows."
