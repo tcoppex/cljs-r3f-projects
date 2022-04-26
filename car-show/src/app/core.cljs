@@ -64,11 +64,10 @@
    ;; Controller.
    [orbit-controls {:target [0 0.35 0] 
                     :maxPolarAngle 1.45}]
-   
-   ;; Envmap / CubeCamera.
+   ;; Environment Map.
    [cube-camera {:resolution 256
                  :frames js/Infinity}
-    ;; render-prop.
+    ;; FIXME : envmap is not applied.
     (fn [texture] (r/as-element [:group
                                  ; [environment {:map texture}]  
                                  [:f> <Car> {:envMap texture}]]))]
@@ -89,8 +88,8 @@
                 :castShadow true}]
    
    ;; Specialized components.
-   [:f> <Ground>]        ; incomplete
-   [:f> <FloatingGrid>]  ; FIXME : sometimes the grid texture is not applied.
+   [:f> <Ground>]
+   [:f> <FloatingGrid>]  ; FIXME : sometimes the grid texture is not loaded.
    [:f> <Boxes>]         ; FIXME : sometimes cubes glitch out of existence.
    [:f> <Rings>]
    
