@@ -2,15 +2,10 @@
   (:require
     ["regenerator-runtime"]
     ["@react-three/drei" :refer [useTexture]]
-    
     ["@react-three/fiber" :refer [useFrame useLoader]]
     ["three" :refer [RepeatWrapping TextureLoader]]
     ["react" :refer [useEffect]]
-    
-    [applied-science.js-interop :as j]
-    ;[reagent.core :as r]
-    ;[reagent.dom :as rdom]
-    ))
+    [applied-science.js-interop :as j]))
 
 ;; ----------------------------------------------------------------------------
 
@@ -22,7 +17,6 @@
 
 (defn <FloatingGrid> []
   (let [diffuse (useTexture grid-texture-path)]
-    
     ;; Sampling parameters.
     (useEffect (fn []
                 (j/assoc! diffuse :wrapS RepeatWrapping)
@@ -31,14 +25,12 @@
                 (j/call-in diffuse [:repeat :set] 30 30)
                 (j/call-in diffuse [:offset :set] 0 0)) 
                #js [diffuse])
-    
     ;; Texture animation.
     (useFrame (fn [state delta]
                 (let [t (j/call-in state [:clock :getElapsedTime])
                       t (* t -0.68)]
                   (j/call-in diffuse [:offset :set] 0 t))
                 ))
-    
     [:mesh {:rotation [(- half-pi) 0 0] 
             :position [0 0.425 0]
             :castShadow true
@@ -48,5 +40,6 @@
                            :opacity 0.25
                            :map diffuse
                            :alphaMap diffuse
-                           :transparent true}]
-      ]))
+                           :transparent true}]]))
+
+;; ----------------------------------------------------------------------------
