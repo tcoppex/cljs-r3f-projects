@@ -11,7 +11,7 @@
     ["react" :refer [useRef useEffect useMemo useState Suspense]]
     ["@react-spring/three" :refer [a useSpring]]
     ["@react-three/fiber" :refer [Canvas useFrame useGraph]]
-    ["@react-three/drei" :refer [useGLTF useTexture useAnimations]]
+    ["@react-three/drei" :refer [useGLTF useTexture useAnimations useCursor]]
     ["three-stdlib" :refer [SkeletonUtils]]
     ["three" :as THREE]
     
@@ -38,11 +38,6 @@
 
 ; (defn use-memo [func o]
 ;   (useMemo #(func o) #js [o]))
-
-; (defmacro js-calls [func o & [k & args]]
-;   )
-; (js-calls action [:reset] [:fadeIn 0.5] [:play])
-; (j/call (j/call (j/call action :reset) :fadeIn 0.5) :play)
 
 (defn js-gets [o & keys] 
   "Retrieve multiples keys from a js object."
@@ -120,6 +115,8 @@
         _ (useSpring (if hovered #js {:scale 1.2 :color "tomato"} 
                                  #js {:scale 0.8 :color "bisque"}))
         [color scale] (js-gets _ :color :scale)]
+    ;; Change cursor when pointer is on the model.
+    (useCursor hovered)
     
     ;; Blend animations when changing.
     (useEffect 
