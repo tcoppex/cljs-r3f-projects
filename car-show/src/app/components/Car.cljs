@@ -38,16 +38,16 @@
 
 ;; ----------------------------------------------------------------------------
 
-(defn <Car> []
+(defn <Car> [{envmap :envMap}] ; FIXME envmap is not used.
   (let [gltf (useGLTF car-model-path)
         scene (j/get gltf :scene)]
     ;; Setup.
     (useEffect #(setup-car scene) #js [gltf])
-    ;; Frame Update.
+    ;; Update.
     (useFrame (fn [state _] 
                 (let [wheels (j/get-in scene [:children 0 :children 0 :children 0])
                       angle (* 2 (get-elapsed-time state))]
                   (rotate-car-wheels wheels angle))))
-    [:primitive {:object scene}]))
+    [:primitive {:object scene }]))
   
 ;; ----------------------------------------------------------------------------
