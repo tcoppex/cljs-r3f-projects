@@ -1,0 +1,22 @@
+{
+  "scripts": {
+    "start": "npm install && npm run watch",
+    "watch": "npx shadow-cljs watch app",
+    "clean": "rm -rf .shadow-cljs node_modules package-lock.json public/js",
+    "cleanStart": "npm run clean && npm run start",
+    "release": "npx shadow-cljs release app"
+  },
+  "devDependencies": {
+    "shadow-cljs": "2.14.4"
+  },
+  "dependencies": {
+    "@react-spring/three": "^9.4.4",
+    "@react-three/drei": "^7.27.5",
+    "@react-three/fiber": "7.0.3",
+    "@react-three/postprocessing": "2.0.5",
+    "react": "^17.0.2",
+    "react-dom": "^17.0.2",
+    
+    "three": "0.139.2"
+  }
+}
