@@ -18,7 +18,7 @@ cp -R template/ my-project
 A project can be started by entering its directory and running the `start` command :
 ```bash
 cd my-project
-npm start
+npm run start
 ```
 
 This will install dependencies, build the files and start a live server. You can then visit [localhost:8080](http://localhost:8080) to run the app locally.
