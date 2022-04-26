@@ -6,8 +6,10 @@
 ;; except for threejs, bump from 0.129.0 to 0.139.2 for this project.
 ;; 
 ;; .DevNote.
-;;  When using threejs 0.139.2 with the "template" project it fails, whereas
+;;  - When using threejs 0.139.2 with the "template" project it fails, whereas
 ;;  it works here. The version needed to be bumped to load the gltf car correctly.
+;;
+;;  - For some reasons textures fails to apply sometimes (fixed by triggering a reload).
 ;;
 
 (ns app.core
@@ -62,14 +64,14 @@
    ;; Controller.
    [orbit-controls {:target [0 0.35 0] 
                     :maxPolarAngle 1.45}]
+   
    ;; Envmap / CubeCamera.
    [cube-camera {:resolution 256
                  :frames js/Infinity}
     ;; render-prop.
     (fn [texture] (r/as-element [:group
-                                 ;; TODO.
                                  ; [environment {:map texture}]  
-                                 [:f> <Car>]]))]
+                                 [:f> <Car> {:envMap texture}]]))]
    ;; Lights.
    [:spotLight {:color [1 0.25 0.7]
                 :intensity 1.5
