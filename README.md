@@ -47,7 +47,7 @@ and the following `Shadow-cljs` packages :
 1. After compilation the browser may sometimes fails to render the app. If it happens try either to refresh your browser or to trigger
 the live compilation until it renders again.
 2. The package `regenerator-runtime` is required for `react-spring` and `react-three/drei` to work.
-3. Upgrading packages versions can be tricky for build integrity, especially with `drei` `react`, `shadow-cljs` & `threejs`.
+3. Upgrading packages versions can be tricky for build integrity, especially with `drei`, `react` & `three` (possibly `shadow-cljs`).
 
 <!-- ----------------------------------------------------------------------- -->
 <!-- 
@@ -66,7 +66,8 @@ the live compilation until it renders again.
 * [Reagent React Features](https://github.com/reagent-project/reagent/blob/master/doc/ReactFeatures.md)
 * [InteropWithReact](https://github.com/reagent-project/reagent/blob/master/doc/InteropWithReact.md)
 * [React Spring](https://react-spring.io/guides/r3f)
-* [THREE.js](https://threejs.org/)
+* [THREE.js](https://threejs.org/) (using [0.129.0](https://github.com/mrdoob/three.js/tree/r129))
+* [react-three/fiber](https://github.com/pmndrs/react-three-fiber) (using [v7.0.3](https://github.com/pmndrs/react-three-fiber/tree/v7.0.3))
 * [react-three/drei](https://github.com/pmndrs/drei) (using [v7.27.5](https://github.com/pmndrs/drei/tree/v7.27.5))
 * [react-three/postprocessing](https://www.npmjs.com/package/@react-three/postprocessing)
 * [react-three-fiber examples](https://docs.pmnd.rs/react-three-fiber/getting-started/examples#basic-examples=)
