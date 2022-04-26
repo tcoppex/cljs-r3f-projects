@@ -70,19 +70,19 @@
   {:position [1.0 1.25 2.5] :near 0.1 :far 100.0 :fov 50})
 
 ;; ----------------------------------------------------------------------------
-;; Controllers.
+;; Controller.
 
-(defn- get-mouse-coord [axis]
+(defn- get-mouse-coord [state axis]
   (j/get-in state [:mouse axis]))
 
 (defn- CameraMouseUpdate []
   "Update the camera based on the mouse screen position."
   (useFrame (fn [state] 
-    (let [newpos #(+ 1.5 (/ (get-mouse-coord %) 4))]
+    (let [newpos #(+ 1.5 (/ (get-mouse-coord state %) 4))]
       (mapv #(j/update-in! state [:camera :position %] lerp (newpos %) 0.075) [:x :y])))))
 
 ;; ----------------------------------------------------------------------------
-;; Views.
+;; Components.
 
 (defn- Model [props]
   ""
