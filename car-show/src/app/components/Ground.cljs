@@ -1,31 +1,22 @@
 (ns app.components.Ground
   (:require
     ["regenerator-runtime"]
-    ["@react-three/drei" :refer [Reflector useTexture]]
+    ["@react-three/drei" :refer [MeshReflectorMaterial useTexture]]
     ["@react-three/fiber" :refer [useFrame]]
     ["three" :refer [LinearEncoding RepeatWrapping]]
-    ["react" :refer [useEffect]]
-    
+    ["react" :refer [useEffect]]    
     [applied-science.js-interop :as j]
     [reagent.core :as r]))
 
 ;; ----------------------------------------------------------------------------
+;; Wrapper.
 
-; Reflector is renamed MeshReflectorMaterial on current drei.
-(def mesh-reflector-material (r/adapt-react-class Reflector))
+(def mesh-reflector-material (r/adapt-react-class MeshReflectorMaterial))
 
 ;; ----------------------------------------------------------------------------
+;; Utils.
 
 (defonce half-pi (/ js/Math.PI 2))
-
-(def public-url "assets/")
-
-(defn- load-textures! [name types]
-  (let [texture-paths (map #(str public-url "textures/" name "-" % ".jpg") types)]
-    ; (println texture-paths)
-    (map useTexture texture-paths)))
-
-;; ----------------------------------------------------------------------------
 
 (defn- set-texture-wrap-mode! [tex x y]
   (j/assoc! tex :wrapS x)
@@ -50,6 +41,14 @@
 
 ;; ----------------------------------------------------------------------------
 
+(def public-url "assets/")
+
+(defn- load-textures! [name types]
+  (let [texture-paths (map #(str public-url "textures/" name "-" % ".jpg") types)]
+    (map useTexture texture-paths)))
+
+;; ----------------------------------------------------------------------------
+
 (defn <Ground> []
   (let [textures (load-textures! "terrain" ["normal" "roughness"])
         [normal roughness] textures]
@@ -67,20 +66,23 @@
                       t (* t -0.128)
                       t (rem t 1)]
                   (set-texture-offset! normal 0 t)
-                  (set-texture-offset! roughness 0 t)
-                )))
+                  (set-texture-offset! roughness 0 t))))
     
     [:mesh {:rotation [(- half-pi) 0 0] 
             :castShadow true
             :receiveShadow true}
-      
+            
       [:planeGeometry {:args [30 30]}]
-      [:meshStandardMaterial {:color [0.7 0.7 0.7]}]
-
+      [:meshStandardMaterial {:dithering true
+                              :color [0.015 0.015 0.015]
+                              :envMapIntensity 0
+                              :normalMap normal
+                              :normalScale [0.15 0.15]
+                              :roughnessMap roughness
+                              :roughness 0.7}]
+    
       ; https://github.com/pmndrs/drei/tree/v7.27.5#meshreflectormaterial
-      ; [mesh-reflector-material {:args [30 30] ;; plane geometry
-                                
-      ;                           :blur [1000 400]
+      ; [mesh-reflector-material {:blur [1000 400]
       ;                           :mixBlur 30
       ;                           :mixStrength 80
       ;                           :mixContrast 1
@@ -92,7 +94,7 @@
       ;                           :depthToBlurRatioBias 0.25
       ;                           :debug 0
                                 
-      ;                           :reflectorOffset 0.2
+      ;                           ;:reflectorOffset 0.2
                                 
       ;                           :dithering true
       ;                           :color [0.015 0.015 0.015]
@@ -102,3 +104,5 @@
       ;                           :roughnessMap roughness
       ;                           :roughness 0.7}]
       ]))
+
+;; ----------------------------------------------------------------------------
