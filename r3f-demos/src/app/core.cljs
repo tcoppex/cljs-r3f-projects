@@ -1,20 +1,26 @@
 ;;
-;; XXX Work In Progress XXX
+;; (Work In Progress)
 ;;
 ;; Inspired by :
 ;;  https://github.com/binaryage/cljs-react-three-fiber
 ;;
 
 (ns app.core
-  (:require [reagent.core :as r]
-            [reagent.dom :as rdom]
-            [app.demos.box :refer [<Canvas>]]))
+  (:require 
+    [reagent.core :as r]
+    [reagent.dom :as rdom]
+    [app.demos.box :refer [box-demo]]
+    [app.demos.animation :refer [animation-demo]]))
 
 ;; ----------------------------------------------------------------------------
 
 ;; DevNotes
 ;;  Right now we directly load the BoxDemo in core but ultimately we should
-;;  create an webapp that dynamically load each demo on demand.
+;;  create a webapp that dynamically load each demo on demand.
+(def <Canvas> 
+  ; box-demo
+  animation-demo
+  )
 
 (defn- app []
   (r/create-class {:reagent-render <Canvas>}))
