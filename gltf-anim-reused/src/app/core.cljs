@@ -7,14 +7,12 @@
 (ns app.core
   (:require
     ["regenerator-runtime"] ; required for react-spring & drei.
-    
     ["react" :refer [useRef useEffect useMemo useState Suspense]]
     ["@react-spring/three" :refer [a useSpring]]
     ["@react-three/fiber" :refer [Canvas useFrame useGraph]]
     ["@react-three/drei" :refer [useGLTF useTexture useAnimations useCursor]]
     ["three-stdlib" :refer [SkeletonUtils]]
     ["three" :as THREE]
-    
     [applied-science.js-interop :as j]
     [reagent.core :as r]
     [reagent.dom :as rdom]))
