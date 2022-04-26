@@ -20,14 +20,17 @@
     [reagent.dom :as rdom]))
 
 ;; ----------------------------------------------------------------------------
-;; ReactJS Redefines.
+;; Redefines.
 
-(defonce canvas (r/adapt-react-class Canvas))
+;; React
 (defonce suspense (r/adapt-react-class Suspense))
 
+;; Fiber.
+(defonce canvas (r/adapt-react-class Canvas))
+
+;; React-Spring.
 (defn- adapt-animated-class [key] 
   (r/adapt-react-class (j/get a key)))
-
 (defonce a-mesh (adapt-animated-class :mesh))
 (defonce a-meshStandardMaterial (adapt-animated-class :meshStandardMaterial))
 
@@ -71,10 +74,13 @@
 ;; ----------------------------------------------------------------------------
 ;; Controllers.
 
+(defn- get-mouse-coord [axis]
+  (j/get-in state [:mouse axis]))
+
 (defn- CameraMouseUpdate []
   "Update the camera based on the mouse screen position."
   (useFrame (fn [state] 
-    (let [newpos #(+ 1.5 (/ (j/get-in state [:mouse %]) 4))]
+    (let [newpos #(+ 1.5 (/ (get-mouse-coord %) 4))]
       (mapv #(j/update-in! state [:camera :position %] lerp (newpos %) 0.075) [:x :y])))))
 
 ;; ----------------------------------------------------------------------------
