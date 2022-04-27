@@ -55,7 +55,6 @@
 ;; Views.
 
 (defn- <CarShow> []
-  ""
   [:group
    ;; Camera.
    [perspective-camera {:makeDefault true 
