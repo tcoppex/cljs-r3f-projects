@@ -13,7 +13,7 @@
     [reagent.dom :as rdom]))
 
 ;; ----------------------------------------------------------------------------
-;; Redefine.
+;; Library wrappers.
 
 (defonce suspense (r/adapt-react-class Suspense))
 (defonce canvas (r/adapt-react-class Canvas))
@@ -21,10 +21,11 @@
 (defonce orbit-controls (r/adapt-react-class OrbitControls))
 (defonce backdrop (r/adapt-react-class Backdrop))
 
-;; ----------------------------------------------------------------------------
-;; App configurations.
+(defn- get-elapsed-time [state]
+  (j/call-in state [:clock :getElapsedTime]))
 
-(defonce assets-path "/assets")
+;; ----------------------------------------------------------------------------
+;; Maths Utils.
 
 (defonce pi js/Math.PI)
 (defonce two-pi (* js/Math.PI 2))
@@ -38,24 +39,6 @@
 (defn sine-cycle
   [x]
   (Math/sin (* pi x)))
-
-(def asset-uri (str assets-path "/three-vrm-girl.vrm"))
-
-(def camera-config {:makeDefault true 
-                    :position [0 1 5] 
-                    :near 0.1 
-                    :far 100.0 
-                    :fov 30})
-
-(def grid-config {:size 10
-                  :division 10
-                  :axis-color "darksalmon"
-                  :color "dimgray"})
-
-;; ----------------------------------------------------------------------------
-
-(defn- get-elapsed-time [state]
-  (j/call-in state [:clock :getElapsedTime]))
 
 ;; ----------------------------------------------------------------------------
 ;; VRM Utils.
@@ -129,6 +112,24 @@
       )
       
     (j/call vrm :update delta-time)))
+
+;; ----------------------------------------------------------------------------
+;; App configurations.
+
+(defonce assets-path "/assets")
+
+(def asset-uri (str assets-path "/three-vrm-girl.vrm"))
+
+(def camera-config {:makeDefault true 
+                    :position [0 1 5] 
+                    :near 0.1 
+                    :far 100.0 
+                    :fov 30})
+
+(def grid-config {:size 10
+                  :division 10
+                  :axis-color "darksalmon"
+                  :color "dimgray"})
 
 ;; ----------------------------------------------------------------------------
 ;; Components.
