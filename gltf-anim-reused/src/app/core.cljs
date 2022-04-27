@@ -7,7 +7,7 @@
 (ns app.core
   (:require
     ["regenerator-runtime"] ; required for react-spring & drei.
-    ["react" :refer [useRef useEffect useMemo useState Suspense]]
+    ["react" :refer [useEffect useMemo useState Suspense]]
     ["@react-spring/three" :refer [a useSpring]]
     ["@react-three/fiber" :refer [Canvas useFrame useGraph]]
     ["@react-three/drei" :refer [useGLTF useTexture useAnimations useCursor]]
@@ -37,7 +37,9 @@
 (defonce pi js/Math.PI)
 (defonce half-pi (* pi 0.5))
 
-(defn lerp [a b t] (.lerp THREE/MathUtils a b t))
+(defn lerp 
+  [a b t] 
+  (.lerp THREE/MathUtils a b t))
 
 (defn skeleton-utils-clone [o] (.clone SkeletonUtils o))
 
@@ -87,6 +89,9 @@
          _ (useGLTF (:model stacy-assets)) 
          [scene animations] (js-gets _ :scene :animations)
          
+         ;; (to test instead)
+         ; {:keys [scene animations]} (j/lookup (:model stacy-assets))
+         
          ;; Fetch texture separately & disable its vertical flip.
          texture (useTexture (:texture stacy-assets))
          _ (j/assoc! texture .flipY false)
@@ -115,13 +120,14 @@
      ;; Change cursor when pointer is on the model.
      (useCursor hovered)
      
-     ;; Blend animations when changing.
+     ;; Blend between animations on transition (ie. when changing).
      (useEffect 
        (fn [] (when-let [action (j/get actions (j/get names animation-index))]
                 ;; Reset and fade-in animation after an index has been changed.
                 (j/call (j/call (j/call action :reset) :fadeIn 0.5) :play)
                 ;; Fade-out on clean-up phase.
                 (fn [] (j/call action :fadeOut 0.5))))
+       ;; Dependencies.
        #js [animation-index actions names])
      
      ;; Character + selection halo.
