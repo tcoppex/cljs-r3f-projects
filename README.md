@@ -47,7 +47,6 @@ and the following `Shadow-cljs` packages :
 1. After compilation the browser may sometimes fails to render the app. If it happens try either to refresh your browser or to trigger
 the live compilation until it renders again.
 2. The package `regenerator-runtime` is required for `react-spring` and `react-three/drei` to work.
-3. Upgrading packages versions can be tricky for build integrity, especially with `drei`, `react` & `three` (possibly `shadow-cljs`).
 
 <!-- ----------------------------------------------------------------------- -->
 <!-- 
