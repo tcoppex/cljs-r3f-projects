@@ -25,7 +25,25 @@
   (j/call-in state [:clock :getElapsedTime]))
 
 ;; ----------------------------------------------------------------------------
-;; Maths Utils.
+;; App configurations.
+
+(defonce assets-path "/assets")
+
+(def asset-uri (str assets-path "/three-vrm-girl.vrm"))
+
+(def camera-config {:makeDefault true 
+                    :position [0 1 5] 
+                    :near 0.1 
+                    :far 100.0 
+                    :fov 30})
+
+(def grid-config {:size 10
+                  :division 10
+                  :axis-color "darksalmon"
+                  :color "dimgray"})
+
+;; ----------------------------------------------------------------------------
+;; Maths utils.
 
 (defonce pi js/Math.PI)
 (defonce two-pi (* js/Math.PI 2))
@@ -41,7 +59,7 @@
   (Math/sin (* pi x)))
 
 ;; ----------------------------------------------------------------------------
-;; VRM Utils.
+;; VRM utils.
 
 (defonce vrm-loaders {:main THREE-VRM/VRM
                       :debug THREE-VRM/VRMDebug})
@@ -83,6 +101,7 @@
    (j/call-in vrm [:blendShapeProxy :setValue] bs value)))
 
 ;; ----------------------------------------------------------------------------
+;; App utils.
 
 (defn- postprocess-vrm!
   "Turn the character's hip to face the Z direction."
@@ -114,24 +133,6 @@
       ; (set-vrm-blendshape! vrm :A (+ 0.5 bs))
       (mapv #(set-vrm-blendshape! vrm % blink) [:BlinkL :BlinkR]))
     (update-vrm! vrm delta-time)))
-
-;; ----------------------------------------------------------------------------
-;; App configurations.
-
-(defonce assets-path "/assets")
-
-(def asset-uri (str assets-path "/three-vrm-girl.vrm"))
-
-(def camera-config {:makeDefault true 
-                    :position [0 1 5] 
-                    :near 0.1 
-                    :far 100.0 
-                    :fov 30})
-
-(def grid-config {:size 10
-                  :division 10
-                  :axis-color "darksalmon"
-                  :color "dimgray"})
 
 ;; ----------------------------------------------------------------------------
 ;; Components.
