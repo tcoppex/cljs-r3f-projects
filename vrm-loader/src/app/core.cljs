@@ -64,6 +64,10 @@
   [vrm]
   (j/call-in vrm [:springBoneManager :reset]))
 
+(defn update-vrm!
+  [vrm delta-time]
+  (j/call vrm :update delta-time))
+
 (defn- rotate-node-axis!
   [node axis-key angle]
   (j/assoc-in! node [:rotation axis-key] angle))
@@ -108,10 +112,8 @@
            [:y :z :x])
       ;; Blendshapes.
       ; (set-vrm-blendshape! vrm :A (+ 0.5 bs))
-      (mapv #(set-vrm-blendshape! vrm % blink) [:BlinkL :BlinkR])
-      )
-      
-    (j/call vrm :update delta-time)))
+      (mapv #(set-vrm-blendshape! vrm % blink) [:BlinkL :BlinkR]))
+    (update-vrm! vrm delta-time)))
 
 ;; ----------------------------------------------------------------------------
 ;; App configurations.
