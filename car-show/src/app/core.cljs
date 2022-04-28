@@ -71,14 +71,12 @@
                 :position [5  5 0]
                 :angle 0.6
                 :penumbra 0.5
-                :shadow-bias -0.0001
                 :castShadow true}]
    [:spotLight {:color [0.14 0.5 1.0]
                 :intensity 2.0
                 :position [-5  5 0]
                 :angle 0.6
                 :penumbra 0.5
-                :shadow-bias -0.0001
                 :castShadow true}]
    
    ;; Specialized components.
