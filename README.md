@@ -27,7 +27,7 @@ This will install dependencies, build the files and start a live server. You can
 
 ## Dependencies
 
-This template use the following `npm` libraries :
+The template use the following `npm` libraries :
 
 - react & react-dom
 - react-spring/three
@@ -66,7 +66,7 @@ the live compilation until it renders again.
 * [Reagent React Features](https://github.com/reagent-project/reagent/blob/master/doc/ReactFeatures.md)
 * [InteropWithReact](https://github.com/reagent-project/reagent/blob/master/doc/InteropWithReact.md)
 * [React Spring](https://react-spring.io/guides/r3f)
-* [THREE.js](https://threejs.org/) (using [0.137.0](https://github.com/mrdoob/three.js/tree/r137))
+* [THREE.js](https://threejs.org/) (using [v0.137.0](https://github.com/mrdoob/three.js/tree/r137))
 * [THREE.js performance tips](https://discoverthreejs.com/tips-and-tricks/#performance)
 * [react-three/fiber](https://github.com/pmndrs/react-three-fiber) (using [v7.0.3](https://github.com/pmndrs/react-three-fiber/tree/v7.0.3))
 * [react-three/drei](https://github.com/pmndrs/drei) (using [v7.27.5](https://github.com/pmndrs/drei/tree/v7.27.5))
