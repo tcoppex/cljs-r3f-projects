@@ -73,36 +73,37 @@
             :receiveShadow true}
             
       [:planeGeometry {:args [30 30]}]
-      [:meshStandardMaterial {:dithering true
-                              :color [0.015 0.015 0.015]
-                              :envMapIntensity 0
-                              :normalMap normal
-                              :normalScale [0.15 0.15]
-                              :roughnessMap roughness
-                              :roughness 0.7}]
+      ; [:meshStandardMaterial {:dithering true
+      ;                         :color [0.015 0.015 0.015]
+      ;                         :envMapIntensity 0
+      ;                         :normalMap normal
+      ;                         :normalScale [0.15 0.15]
+      ;                         :roughnessMap roughness
+      ;                         :roughness 0.7}]
     
-      ; https://github.com/pmndrs/drei/tree/v7.27.5#meshreflectormaterial
-      ; [mesh-reflector-material {:blur [1000 400]
-      ;                           :mixBlur 30
-      ;                           :mixStrength 80
-      ;                           :mixContrast 1
-      ;                           :resolution 1024
-      ;                           :mirror 0
-      ;                           :depthScale 0.01
-      ;                           :minDepthThreshold 0.9
-      ;                           :maxDepthThreshold 1
-      ;                           :depthToBlurRatioBias 0.25
-      ;                           :debug 0
+      ; https://github.com/pmndrs/drei/tree/v8.20.2#meshreflectormaterial
+      [mesh-reflector-material {:blur [1000 400]
+                                :mixBlur 30
+                                :mixStrength 80
+                                :mixContrast 1
+                                :resolution 1024
+                                :mirror 0
+                                :depthScale 0.01
+                                :minDepthThreshold 0.9
+                                :maxDepthThreshold 1
+                                :depthToBlurRatioBias 0.25
+                                :debug 0
                                 
-      ;                           ;:reflectorOffset 0.2
+                                :reflectorOffset 0.2
                                 
-      ;                           :dithering true
-      ;                           :color [0.015 0.015 0.015]
-      ;                           :envMapIntensity 0
-      ;                           :normalMap normal
-      ;                           :normalScale [0.15 0.15]
-      ;                           :roughnessMap roughness
-      ;                           :roughness 0.7}]
+                                :dithering true
+                                :color [0.015 0.015 0.015]
+                                :envMapIntensity 0
+                                :normalMap normal
+                                :normalScale [0.15 0.15]
+                                :roughnessMap roughness
+                                :roughness 0.7}]
+      
       ]))
 
 ;; ----------------------------------------------------------------------------
