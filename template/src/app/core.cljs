@@ -7,7 +7,7 @@
     [reagent.dom :as rdom]))
 
 ;; ----------------------------------------------------------------------------
-;; ReactJS redefine.
+;; Wrappers.
 
 ;; We need to adapt react-three/* classes to reagent, whereas ThreeJS classes 
 ;; can be used directly as keyword or name.
@@ -37,14 +37,7 @@
     (set-rotation! o x y z)))
 
 ;; ----------------------------------------------------------------------------
-;; Views.
-
-;;
-;; To use hooks (useFrame, useRef, useState) we need to wrap objects in a fragment 
-;; tag (eg [:f> <Box>]).
-;;
-;; @see https://github.com/reagent-project/reagent/blob/master/doc/ReactFeatures.md#hooks=
-;;
+;; Components.
 
 (defn- <Box>
   "Reactive box component."
@@ -75,8 +68,7 @@
 (defn- <Canvas>
   "Two rotating and interactive boxes with a light setup."
   []
-   [canvas {:shadows true
-            :camera camera-config}
+   [canvas {:camera camera-config}
     [:ambientLight {:intensity 0.5}]
     [:spotLight {:position [10 10 10] :angle 0.5 :penumbra 1}]
     [:pointLight {:position [-10 -10 -10]}]
