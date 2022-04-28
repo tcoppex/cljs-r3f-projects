@@ -15,7 +15,8 @@
 
 ;; ----------------------------------------------------------------------------
 
-(defn <FloatingGrid> []
+(defn <FloatingGrid>
+  []
   (let [diffuse (useTexture grid-texture-path)]
     ;; Sampling parameters.
     (useEffect (fn []
@@ -26,18 +27,18 @@
                 (j/call-in diffuse [:offset :set] 0 0)) 
                #js [diffuse])
     ;; Texture animation.
-    (useFrame (fn [state delta]
-                (let [t (j/call-in state [:clock :getElapsedTime])
-                      t (* t -0.68)]
-                  (j/call-in diffuse [:offset :set] 0 t))
-                ))
+    (useFrame 
+      (fn [state delta]
+        (let [t (j/call-in state [:clock :getElapsedTime])
+              y-offset (* t -0.68)]
+          (j/call-in diffuse [:offset :set] 0 y-offset))))
     [:mesh {:rotation [(- half-pi) 0 0] 
             :position [0 0.425 0]
             :castShadow true
             :receiveShadow true}
       [:planeGeometry {:args [35 35]}]
       [:meshBasicMaterial {:color [1.0 1.0 1.0]
-                           :opacity 0.05
+                           :opacity 0.075
                            :map diffuse
                            :alphaMap diffuse
                            :transparent true}]]))

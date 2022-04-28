@@ -49,22 +49,28 @@
 ;; ----------------------------------------------------------------------------
 ;; Components.
 
-(defn- <CarShow> []
+(defn- <CarShow> 
+  []
   [:group
+   
    ;; Camera.
    [perspective-camera {:makeDefault true 
                         :fov 50 
                         :position [3 2 5]}]
+   
    ;; Controller.
    [orbit-controls {:target [0 0.35 0] 
                     :maxPolarAngle 1.45}]
+   
    ;; Environment Map.
    [cube-camera {:resolution 256
                  :frames js/Infinity}
-    
-    (fn [texture] (r/as-element [:group
-                                 [environment {:map texture}]
-                                 [:f> <Car>]]))]
+    (fn [envmap]
+      (r/as-element
+        [:group 
+         [environment {:map envmap}]
+         [:f> <Car>]]))]
+   
    ;; Lights.
    [:spotLight {:color [1 0.25 0.7]
                 :intensity 1.5
@@ -97,7 +103,8 @@
     [chromatic-aberration {:blendFunction normal-blend-func
                            :offset [0.0005 0.0012]}]]])
 
-(defn- <App> []
+(defn- <App>
+  []
   [suspense {:fallback nil}
    [canvas {:shadows true}
     [<CarShow>]]])
