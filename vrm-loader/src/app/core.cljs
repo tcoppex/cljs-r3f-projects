@@ -26,12 +26,12 @@
   (Object3D.))
 
 (defn- set-position-axis!
-  [o axis value]
-  (j/assoc-in! o [:position axis] value))
+  [node axis value]
+  (j/assoc-in! node [:position axis] value))
 
 (defn- rotate-node-axis!
-  [node axis angle]
-  (j/assoc-in! node [:rotation axis] angle))
+  [node axis radians]
+  (j/assoc-in! node [:rotation axis] radians))
 
 (defn- get-elapsed-time
   [state]
@@ -128,7 +128,7 @@
 ;; App utils.
 
 (defn- postprocess-vrm!
-  "Turn the character's hip to face the Z direction."
+  "Turn the character's hip to face the Z axis."
   [vrm]
   (rotate-joint! vrm :Hips :y pi)
   (reset-vrm-bone-manager! vrm))
@@ -189,10 +189,20 @@
     (useEffect #(set-vrm-lookat-target! vrm target)
                #js [vrm target-ref])
     (move-eyes-target! target)
+    
     ;; TODO Change the material to use flat colors, 
     ;;      which works by default without vrm postprocessing.
     [:group
-     [:primitive {:object scene}]]))
+     [:primitive {:object scene}]
+     
+     ; [:skinnedMesh {:castShadow true
+     ;                :receiveShadow true
+     ;                ; :geometry geometry
+     ;                ; :skeleton skeleton
+     ;                }
+     ;     [:meshBasicMaterial {;:map texture 
+     ;                          :skinning true}]]
+     ]))
 
 (defn- <Canvas>
   []
