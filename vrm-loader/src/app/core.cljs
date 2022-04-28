@@ -2,11 +2,11 @@
   (:require
     ["regenerator-runtime"] ; required for react-spring & drei.
     
-    ["react" :refer [useState useEffect Suspense]]
+    ["react" :refer [useRef useState useEffect Suspense]]
     ["@react-three/fiber" :refer [Canvas useFrame]]
     ["@react-three/drei" :refer [useGLTF useAnimations PerspectiveCamera OrbitControls Backdrop]]
     ["@pixiv/three-vrm" :as THREE-VRM]
-    ["three" :as THREE]
+    ["three" :as THREE :refer [Object3D]]
     
     [applied-science.js-interop :as j]
     [reagent.core :as r]
@@ -21,8 +21,27 @@
 (defonce orbit-controls (r/adapt-react-class OrbitControls))
 (defonce backdrop (r/adapt-react-class Backdrop))
 
-(defn- get-elapsed-time [state]
+(defn- new-object3d
+  []
+  (Object3D.))
+
+(defn- set-position-axis!
+  [o axis value]
+  (j/assoc-in! o [:position axis] value))
+
+(defn- get-elapsed-time
+  [state]
   (j/call-in state [:clock :getElapsedTime]))
+
+(defn- get-mouse
+  [state]
+  (let [{:keys [x y]} (j/lookup (j/get state :mouse))]
+    {:x x :y y}))
+
+(defn- get-viewport 
+  []
+  (let [{:keys [innerWidth innerHeight]} (j/lookup js/window)]
+    {:width innerWidth :height innerHeight}))
 
 ;; ----------------------------------------------------------------------------
 ;; App configurations.
@@ -100,6 +119,12 @@
   (let [bs (j/get-in THREE-VRM [:VRMSchema :BlendShapePresetName key])]
    (j/call-in vrm [:blendShapeProxy :setValue] bs value)))
 
+(defn- set-vrm-lookat-target!
+  [vrm target]
+  (set-position-axis! target :x 12)
+  (set-position-axis! target :y -4.8)
+  (j/assoc-in! vrm [:lookAt :target] target))
+
 ;; ----------------------------------------------------------------------------
 ;; App utils.
 
@@ -121,18 +146,29 @@
 (defn- animate-vrm!
   [vrm elapsed-time delta-time]
   (when vrm
-    ; (println elapsed-time)
     (let [angle (* quarter-pi (sine-cycle elapsed-time))
           _ (sine-cycle (* 0.75 elapsed-time))
           blink (Math/pow (smoothstep -1 1 _) 1500)]
       ;; Joints.
-      (mapv #(rotate-joint! vrm %1 %2 angle) 
-           [:Neck :LeftUpperArm :RightUpperArm] 
-           [:y :z :x])
+      (mapv #(rotate-joint! vrm %1 %2 (* angle %3)) 
+           [:LeftUpperArm :RightUpperArm :Neck] 
+           [:z :x :y]
+           [0.6 0.8 0.2])
       ;; Blendshapes.
-      ; (set-vrm-blendshape! vrm :A (+ 0.5 bs))
+      (set-vrm-blendshape! vrm :A angle)
       (mapv #(set-vrm-blendshape! vrm % blink) [:BlinkL :BlinkR]))
+    ;; Trigger VRM internal animation update.
     (update-vrm! vrm delta-time)))
+
+(defn- move-eyes-target!
+  "Move the target that the character eyes follow."
+  [target]
+  (useFrame (fn [state _]
+    (let [[mx my] (vals (get-mouse state))
+          [w h] (vals (get-viewport))
+          track-eye #(* 8 (/ (* %1 (/ %2 2)) %2)) ;;
+          new-pos (map track-eye [mx my] [w h])]
+      (mapv #(set-position-axis! target %1 %2) [:x :y] new-pos)))))
 
 ;; ----------------------------------------------------------------------------
 ;; Components.
@@ -141,16 +177,24 @@
   []
   (let [gltf (useGLTF asset-uri)
         {:keys [scene]} (j/lookup gltf)
-        [vrm set-vrm] (useState nil)]
+        [vrm set-vrm] (useState nil)
+        target-ref (useRef (new-object3d))
+        target (j/get target-ref :current)]
+    
     ;; Post-Process the vrm file once loaded.
     (useEffect #(setup-vrm! gltf scene set-vrm) 
                #js [gltf scene])
     ;; Animate the mesh.
-    (useFrame (fn [state delta] 
+    (useFrame (fn [state delta]
                 (animate-vrm! vrm (get-elapsed-time state) delta)))
+
+    ;; [WIP] eyes target motion.
+    (useEffect #(set-vrm-lookat-target! vrm target)
+               #js [vrm target-ref])
+    (move-eyes-target! target)
     
     ;; TODO
-    ;; Change its material to use flat colors, which works when useEffect is disabled.
+    ;; Change the material to use flat colors, which works when useEffect is disabled.
     [:group
      [:primitive {:object scene}]]))
 
