@@ -2,14 +2,9 @@
 ;; This is a ClojureScript adaptation of @Domenicobrz "Car Show" demo.
 ;;   cf. https://github.com/Domenicobrz/R3F-in-practice
 ;;
-;; Note that the original project use more recent versions of its dependencies,
-;; except for threejs, bump from 0.129.0 to 0.139.2 for this project.
-;; 
 ;; .DevNote.
-;;  - When using threejs 0.139.2 with the "template" project it fails, whereas
-;;  it works here. The version needed to be bumped to load the gltf car correctly.
-;;
-;;  - For some reasons textures fails to apply sometimes (fixed by triggering a reload).
+;;  - For some reasons textures may fails to load from time to time (grid & ground),
+;;    often fixed by triggering a reload.
 ;;
 
 (ns app.core
@@ -52,7 +47,7 @@
 (defonce normal-blend-func (j/get BlendFunction .NORMAL))
 
 ;; ----------------------------------------------------------------------------
-;; Views.
+;; Components.
 
 (defn- <CarShow> []
   [:group
@@ -83,7 +78,7 @@
                 :position [-5  5 0]
                 :angle 0.6
                 :penumbra 0.5
-                ; :shadow-bias -0.0001
+                :shadow-bias -0.0001
                 :castShadow true}]
    
    ;; Specialized components.
