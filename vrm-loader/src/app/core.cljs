@@ -29,6 +29,10 @@
   [o axis value]
   (j/assoc-in! o [:position axis] value))
 
+(defn- rotate-node-axis!
+  [node axis angle]
+  (j/assoc-in! node [:rotation axis] angle))
+
 (defn- get-elapsed-time
   [state]
   (j/call-in state [:clock :getElapsedTime]))
@@ -83,6 +87,7 @@
 (defonce vrm-loaders {:main THREE-VRM/VRM
                       :debug THREE-VRM/VRMDebug})
 
+;; Change this to :debug to see joints & bounding volumes.
 (def vrm-loader (:main vrm-loaders))
 
 (defn- get-vrm-bone-name 
@@ -105,14 +110,10 @@
   [vrm delta-time]
   (j/call vrm :update delta-time))
 
-(defn- rotate-node-axis!
-  [node axis-key angle]
-  (j/assoc-in! node [:rotation axis-key] angle))
-
 (defn- rotate-joint!
   "Rotate a specific joint from a VRM file."
-  [vrm bone-id axe angle]
-  (rotate-node-axis! (get-vrm-bone-node vrm bone-id) axe angle))
+  [vrm bone-id axis angle]
+  (rotate-node-axis! (get-vrm-bone-node vrm bone-id) axis angle))
 
 (defn- set-vrm-blendshape!
   [vrm key value]
@@ -121,8 +122,6 @@
 
 (defn- set-vrm-lookat-target!
   [vrm target]
-  (set-position-axis! target :x 12)
-  (set-position-axis! target :y -4.8)
   (j/assoc-in! vrm [:lookAt :target] target))
 
 ;; ----------------------------------------------------------------------------
@@ -157,7 +156,7 @@
       ;; Blendshapes.
       (set-vrm-blendshape! vrm :A angle)
       (mapv #(set-vrm-blendshape! vrm % blink) [:BlinkL :BlinkR]))
-    ;; Trigger VRM internal animation update.
+    ;; Trigger internal animation update.
     (update-vrm! vrm delta-time)))
 
 (defn- move-eyes-target!
@@ -180,21 +179,18 @@
         [vrm set-vrm] (useState nil)
         target-ref (useRef (new-object3d))
         target (j/get target-ref :current)]
-    
     ;; Post-Process the vrm file once loaded.
     (useEffect #(setup-vrm! gltf scene set-vrm) 
                #js [gltf scene])
     ;; Animate the mesh.
     (useFrame (fn [state delta]
                 (animate-vrm! vrm (get-elapsed-time state) delta)))
-
-    ;; [WIP] eyes target motion.
+    ;; Set and Update the eyes target.
     (useEffect #(set-vrm-lookat-target! vrm target)
                #js [vrm target-ref])
     (move-eyes-target! target)
-    
-    ;; TODO
-    ;; Change the material to use flat colors, which works when useEffect is disabled.
+    ;; TODO Change the material to use flat colors, 
+    ;;      which works by default without vrm postprocessing.
     [:group
      [:primitive {:object scene}]]))
 
@@ -214,7 +210,7 @@
     ;          :receiveShadow true}
     ;  [backdrop {:floor 2.0
     ;             :segments 10}
-    ;   [:meshStandardMaterial {:color "sienna"}]]]
+    ;   [:meshStandardMaterial {:color "aquamarine"}]]]
     
     [:f> vrm-character]
     
