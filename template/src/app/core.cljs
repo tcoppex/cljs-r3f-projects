@@ -1,7 +1,9 @@
 (ns app.core
   (:require
+    ["regenerator-runtime"]
+
     ["@react-three/fiber" :refer [Canvas useFrame]]
-    [react :refer [useRef useState]]
+    [react :refer [useRef useState Suspense]]    
     [applied-science.js-interop :as j]
     [reagent.core :as r]
     [reagent.dom :as rdom]))
@@ -9,8 +11,7 @@
 ;; ----------------------------------------------------------------------------
 ;; Wrappers.
 
-;; We need to adapt react-three/* classes to reagent, whereas ThreeJS classes 
-;; can be used directly as keyword or name.
+(defonce suspense (r/adapt-react-class Suspense))
 (defonce canvas (r/adapt-react-class Canvas))
 
 ;; ----------------------------------------------------------------------------
@@ -68,12 +69,13 @@
 (defn- <Canvas>
   "Two rotating and interactive boxes with a light setup."
   []
+  [suspense {:fallback nil}
    [canvas {:camera camera-config}
     [:ambientLight {:intensity 0.5}]
     [:spotLight {:position [10 10 10] :angle 0.5 :penumbra 1}]
     [:pointLight {:position [-10 -10 -10]}]
     [:f> <Box> {:color "orange" :position [-1.2 0 0]}]
-    [:f> <Box> {:color "red"    :position [+1.2 0 0]}]])
+    [:f> <Box> {:color "red"    :position [+1.2 0 0]}]]])
 
 (defn- app []
   (r/create-class {:reagent-render <Canvas>}))
