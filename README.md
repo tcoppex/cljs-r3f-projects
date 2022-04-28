@@ -6,10 +6,6 @@ A collection of samples using a *__ClojureScript / React-Three-Fiber__* stack.
 
 ## Quickstart
 
-<!-- 
-**_Preamble_**<br/>
-A ClojureScript (or _Reagent_) project can be created using  `npx create-cljs-project my-project` (respectively `lein new reagent-frontend my-project`) but the versionning of the stack (*especially for react-three/drei*) can become messed up. -->
-
 To create a new project, copy the `template` project directory :
 ```bash
 cp -R template/ my-project
@@ -48,12 +44,6 @@ and the following `Shadow-cljs` packages :
 the live compilation until it renders again.
 2. The package `regenerator-runtime` is required for `react-spring` and `react-three/drei` to work.
 3. At the moment some dependencies fail to compile using a `shadow-cljs` version above `2.14.x`.
-
-<!-- ----------------------------------------------------------------------- -->
-<!-- 
-## TODO
-
-*Check devDependencies : webpack, eslint & babel, source-map-support.* -->
 
 <!-- ----------------------------------------------------------------------- -->
 
