@@ -25,7 +25,7 @@
   (when (= (type o) Mesh)
     (j/assoc! o :castShadow true)
     (j/assoc! o :receiveShadow true)
-    (j/assoc-in! o [:material :envMapIntensity] 20)))
+    (j/assoc-in! o [:material :envMapIntensity] 18)))
 
 (defn- setup-car [scene]
   (j/call-in scene [:scale :set] 0.005 0.005 0.005)
@@ -38,7 +38,7 @@
 
 ;; ----------------------------------------------------------------------------
 
-(defn <Car> [{envmap :envMap}] ; FIXME envmap is not used.
+(defn <Car> []
   (let [gltf (useGLTF car-model-path)
         scene (j/get gltf :scene)]
     ;; Setup.
@@ -48,6 +48,6 @@
                 (let [wheels (j/get-in scene [:children 0 :children 0 :children 0])
                       angle (* 2 (get-elapsed-time state))]
                   (rotate-car-wheels wheels angle))))
-    [:primitive {:object scene }]))
+    [:primitive {:object scene}]))
   
 ;; ----------------------------------------------------------------------------
